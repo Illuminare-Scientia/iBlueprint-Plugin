@@ -1,11 +1,11 @@
 # Updating this repository
 
-Reference both local platform directories before updating this plugin:
+Reference a local checkout of the iBlueprint platform repository before updating this plugin. Its location varies by machine; ask for it if you don't know it.
 
-- [/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/plugins](/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/plugins): upstream plugin package, marketplace manifest, skills, evaluation fixtures, and package tests. Compare its `iblueprint/` directory with this repository's `iblueprint/`, and its `.claude-plugin/marketplace.json` with this repository's marketplace manifest.
-- [/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/](/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/): platform implementation and documentation. Consult the relevant API and shared types when checking tool names, inputs, authentication, or behavior.
+- Its `plugins/` folder: upstream plugin package, marketplace manifest, skills, evaluation fixtures, and package tests. Compare its `iblueprint/` directory with this repository's `iblueprint/`, and its `.claude-plugin/marketplace.json` with this repository's marketplace manifest.
+- The rest of the platform repository: implementation and documentation. Consult the relevant API and shared types when checking tool names, inputs, authentication, or behavior.
 
-If either reference directory is unavailable, report that limitation rather than assuming the plugin is current. Do not modify the platform repository as part of a plugin update unless explicitly requested.
+If the platform checkout is unavailable, report that limitation rather than assuming the plugin is current. Do not modify the platform repository as part of a plugin update unless explicitly requested.
 
 Preserve repository-specific documentation, update guidance, ignore rules, and multi-host packaging when syncing upstream changes. This repository supports Claude, OpenAI (ChatGPT and Codex), GitHub Copilot (CLI and VS Code), and Gemini CLI. Keep the OpenAI marketplace at `.agents/plugins/marketplace.json`, the Claude/Copilot marketplace at `.claude-plugin/marketplace.json`, and the root Gemini extension and context imports intact even when the platform copy does not yet include them.
 

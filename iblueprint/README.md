@@ -22,14 +22,7 @@ Nothing is sent anywhere other than iBlueprint. See the [privacy policy](https:/
 
 ## Install
 
-**Claude Code**
-
-```bash
-claude plugin marketplace add Illuminare-Scientia/iBlueprint-Plugin
-claude plugin install iblueprint@iblueprint
-```
-
-**claude.ai and Cowork:** add iBlueprint from the directory, or add the connector yourself under **Settings → Connectors → Add custom connector** with the URL `https://api.iblueprint.ai/api/mcp`.
+**Claude:** add iBlueprint from the directory. In claude.ai and Cowork it's under **Customize → Plugins**; in Claude Code, run `/plugin directory`. You can also add only the connector under **Settings → Connectors → Add custom connector** with the URL `https://api.iblueprint.ai/api/mcp`. To install from this repository's marketplace instead, see the [repository installation instructions](../README.md#install).
 
 **OpenAI ChatGPT and Codex, GitHub Copilot, and Gemini CLI:** see the [repository installation instructions](../README.md#install) for marketplace registration, local installation, and host-specific authentication. Copilot shares this package's Agent Plugins manifest, MCP configuration, and skills. Gemini installs from the repository root and imports these skills as context.
 
@@ -58,15 +51,7 @@ claude plugin install iblueprint@iblueprint
 | `evals/` | `claude plugin eval`; not loaded at run time |
 | `tests/` | `node --test`, checks the portable package |
 
-From the repository root:
-
-```bash
-claude plugin validate --strict iblueprint
-node --test iblueprint/tests/package.test.mjs
-claude plugin eval iblueprint --runs 1 --ablation none
-```
-
-The evals answer from mocked tools in `evals/mocks/`, so they need no iBlueprint account or network access.
+The evals answer from mocked tools in `evals/mocks/`, so they need no iBlueprint account or network access. The validation, test, and eval commands are in the [repository README](../README.md#development-and-updates).
 
 ## License
 

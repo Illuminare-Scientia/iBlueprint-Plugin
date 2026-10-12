@@ -83,10 +83,7 @@ Restart Gemini CLI, then run `/extensions list` and `/mcp auth iblueprint`. The 
 
 ## Development and updates
 
-This repository publishes the plugin maintained alongside the iBlueprint platform. Use both local directories as references for updates:
-
-- [Platform plugins](/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/plugins): upstream marketplace manifest, plugin manifests, skills, evaluation fixtures, and tests.
-- [Platform repository](/Users/jdzurik/Documents/GitHub/iBlueprint-Platform/): implementation and documentation for the API, MCP tools, authentication, and shared types.
+This repository publishes the plugin maintained alongside the iBlueprint platform, whose `plugins/` folder holds the upstream copy.
 
 Compare the upstream `plugins/iblueprint/` package and `plugins/.claude-plugin/marketplace.json` with their counterparts here. Preserve this repository's update guidance, ignore rules, and multi-host adapters described in [AGENTS.md](AGENTS.md), and exclude local artifacts and generated evaluation results.
 
@@ -101,9 +98,10 @@ When the Claude CLI is installed, also validate the marketplace and plugin:
 ```bash
 claude plugin validate --strict .
 claude plugin validate --strict iblueprint
+claude plugin eval iblueprint --runs 1 --ablation none   # mocked tools; needs no iBlueprint account
 ```
 
-See [AGENTS.md](AGENTS.md) for update guidance and the [plugin's development instructions](iblueprint/README.md#development) for evaluations.
+See [AGENTS.md](AGENTS.md) for update guidance and the [plugin's development notes](iblueprint/README.md#development) for the package layout.
 
 ## Support
 
