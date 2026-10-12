@@ -74,6 +74,41 @@ describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
     }
   });
 
+  it('includes submission metadata with a subtitle of at most 30 characters', async () => {
+    const manifest = await readJson('plugin.json');
+    const interfaceMetadata = manifest.extensions['com.openai'].interface;
+
+    assert.ok(interfaceMetadata.shortDescription.length > 0);
+    assert.ok(interfaceMetadata.shortDescription.length <= 30);
+    for (const field of ['websiteURL', 'supportURL', 'privacyPolicyURL', 'termsOfServiceURL']) {
+      const url = new URL(interfaceMetadata[field]);
+      assert.equal(url.protocol, 'https:');
+      assert.equal(url.hostname, 'iblueprint.ai');
+      assert.equal(url.username, '');
+      assert.equal(url.password, '');
+    }
+    assert.equal(interfaceMetadata.supportURL, 'https://iblueprint.ai/support');
+    assert.equal(interfaceMetadata.privacyPolicyURL, 'https://iblueprint.ai/privacy');
+    assert.equal(interfaceMetadata.termsOfServiceURL, 'https://iblueprint.ai/terms');
+  });
+
+  it('includes square PNG listing and composer icons within submission size limits', async () => {
+    const manifest = await readJson('plugin.json');
+    const interfaceMetadata = manifest.extensions['com.openai'].interface;
+
+    for (const field of ['logo', 'composerIcon']) {
+      assert.equal(interfaceMetadata[field], './assets/icon.png');
+      const icon = await readFile(resolve(pluginRoot, interfaceMetadata[field]));
+      assert.deepEqual(icon.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+      assert.equal(icon.toString('ascii', 12, 16), 'IHDR');
+      const width = icon.readUInt32BE(16);
+      const height = icon.readUInt32BE(20);
+      assert.equal(width, height);
+      assert.ok(width >= 48 && width <= 4096);
+      assert.ok(icon.length <= 5 * 1024 * 1024);
+    }
+  });
+
   it('connects exactly one remote Streamable HTTP MCP server', async () => {
     const mcp = await readJson('mcp.json');
     const servers = Object.entries(mcp.mcpServers);

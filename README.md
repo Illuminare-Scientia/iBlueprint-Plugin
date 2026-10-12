@@ -40,6 +40,8 @@ codex plugin marketplace add Illuminare-Scientia/iBlueprint-Plugin
 
 For local testing, run `codex plugin marketplace add .` from this repository's root. In supported ChatGPT desktop workflows, select the repository marketplace in the Plugins Directory and install iBlueprint. Workspace admins can import the GitHub marketplace for team distribution. Follow the plugin's connection prompt to sign in to iBlueprint. The Codex IDE extension does not currently install plugins.
 
+For an OpenAI submission ZIP, include only `plugin.json`, `mcp.json`, `skills/`, `assets/`, `LICENSE`, and `README.md` from `iblueprint/`. Put those files at the archive root, not inside an `iblueprint/` wrapper directory. Exclude OS metadata, evals, tests, marketplace catalogs, and other hosts' configuration. The OpenAI interface metadata must include a subtitle of at most 30 characters, accessible support/privacy/terms URLs, and bundled listing and composer icons. Upload the ZIP at [OpenAI Plugins](https://platform.openai.com/plugins) and complete the MCP connection and review checks.
+
 ### GitHub Copilot
 
 Install from this repository's root with Copilot CLI:

@@ -21,7 +21,7 @@
       "onboardingSkill": "./skills/setup/SKILL.md",
       "interface": {
         "displayName": "iBlueprint",
-        "shortDescription": "Find, run, and design AI workflows from ChatGPT and Codex.",
+        "shortDescription": "Run and design AI workflows",
         "longDescription": "Connect your iBlueprint account to find authorized Blueprints, inspect their inputs, run workflows on request, review results, and propose safely validated edits.",
         "developerName": "Illuminare Scientia",
         "category": "Productivity",
@@ -30,6 +30,11 @@
           "Write"
         ],
         "websiteURL": "https://iblueprint.ai",
+        "supportURL": "https://iblueprint.ai/support",
+        "privacyPolicyURL": "https://iblueprint.ai/privacy",
+        "termsOfServiceURL": "https://iblueprint.ai/terms",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png",
         "defaultPrompt": [
           "Find the iBlueprint workflow I use for weekly reporting.",
           "Show the required inputs for my customer onboarding Blueprint.",
