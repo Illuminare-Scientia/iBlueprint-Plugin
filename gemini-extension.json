@@ -1,0 +1,13 @@
+{
+  "name": "iblueprint",
+  "version": "0.1.0",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "iblueprint": {
+      "httpUrl": "https://api.iblueprint.ai/api/mcp",
+      "oauth": {
+        "enabled": true
+      }
+    }
+  }
+}

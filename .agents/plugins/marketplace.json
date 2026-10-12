@@ -1,0 +1,20 @@
+{
+  "name": "iblueprint",
+  "interface": {
+    "displayName": "iBlueprint"
+  },
+  "plugins": [
+    {
+      "name": "iblueprint",
+      "source": {
+        "source": "local",
+        "path": "./iblueprint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

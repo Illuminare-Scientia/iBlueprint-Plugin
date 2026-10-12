@@ -1,0 +1,15 @@
+{
+  "name": "iblueprint",
+  "description": "iBlueprint plugins for Claude Code",
+  "owner": {
+    "name": "Illuminare Scientia",
+    "url": "https://iblueprint.ai"
+  },
+  "plugins": [
+    {
+      "name": "iblueprint",
+      "source": "./iblueprint",
+      "description": "Find, run, and design iBlueprint Blueprints from Claude Code"
+    }
+  ]
+}

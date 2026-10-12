@@ -5,7 +5,15 @@ description: Run, inspect, and design iBlueprint Blueprints, use and save prompt
 
 # Working with iBlueprint
 
-The `iblueprint` MCP server acts as the signed-in iBlueprint user. It can see and run only what they can in the app. If its tools are unavailable or return Unauthorized, tell the user to run `/mcp`, select `iblueprint`, and sign in. A browser window opens for the iBlueprint login and consent page.
+The `iblueprint` MCP server acts as the signed-in iBlueprint user. It can see and run only what they can in the app. If its tools are unavailable, first check that the plugin or extension is installed and its server is enabled. If they return Unauthorized, direct the user to the current host's iBlueprint sign-in and consent flow:
+
+- Claude Code: run `/mcp`, select `iblueprint`, and authenticate.
+- ChatGPT or Codex: use the plugin's connection prompt or connection settings.
+- GitHub Copilot CLI: open `/mcp` and authenticate the `iblueprint` server.
+- GitHub Copilot in VS Code: run **MCP: List Servers**, select `iblueprint`, and follow the authentication prompt.
+- Gemini CLI: run `/mcp auth iblueprint`.
+
+Sign-in opens the iBlueprint login and consent page in the browser. Never ask the user to paste a token, password, API key, or other secret into chat. If sign-in fails, report the error rather than bypassing authentication.
 
 ## Run a blueprint
 

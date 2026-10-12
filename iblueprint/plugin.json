@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "iblueprint",
   "version": "0.1.0",
-  "description": "Find, inspect, run, and safely edit iBlueprint Blueprints from ChatGPT and Codex.",
+  "description": "Find, inspect, run, and safely edit iBlueprint Blueprints from ChatGPT, Codex, and GitHub Copilot.",
   "author": {
     "name": "Illuminare Scientia",
     "url": "https://iblueprint.ai"
   },
   "homepage": "https://iblueprint.ai",
-  "repository": "https://github.com/iBlueprintAI/iblueprint-plugins",
+  "repository": "https://github.com/Illuminare-Scientia/iBlueprint-Plugin",
   "license": "MIT",
   "keywords": [
     "iblueprint",
