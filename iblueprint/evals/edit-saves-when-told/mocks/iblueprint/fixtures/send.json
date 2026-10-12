@@ -1,0 +1,21 @@
+{
+  "node": {
+    "id": "send",
+    "type": "api",
+    "title": "Send reply",
+    "config": {
+      "method": "POST",
+      "url": "https://helpdesk.acme.test/api/tickets/{{input.ticketId}}/replies",
+      "body": {
+        "message": "{{steps.draft-reply.output}}"
+      }
+    }
+  },
+  "incoming": [
+    {
+      "source": "draft-reply",
+      "connectionType": "next"
+    }
+  ],
+  "outgoing": []
+}

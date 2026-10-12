@@ -1,0 +1,17 @@
+{
+  "node": {
+    "id": "classify",
+    "type": "prompt",
+    "title": "Classify ticket",
+    "config": {
+      "promptText": "Classify this support ticket by topic and urgency: {{input.ticket}}"
+    }
+  },
+  "incoming": [],
+  "outgoing": [
+    {
+      "target": "draft-reply",
+      "connectionType": "next"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "iblueprint",
+  "version": "0.1.0",
+  "description": "Find, inspect, run, and safely edit iBlueprint Blueprints from ChatGPT and Codex.",
+  "author": {
+    "name": "Illuminare Scientia",
+    "url": "https://iblueprint.ai"
+  },
+  "homepage": "https://iblueprint.ai",
+  "repository": "https://github.com/iBlueprintAI/iblueprint-plugins",
+  "license": "MIT",
+  "keywords": [
+    "iblueprint",
+    "blueprints",
+    "workflows",
+    "automation"
+  ],
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/setup/SKILL.md",
+      "interface": {
+        "displayName": "iBlueprint",
+        "shortDescription": "Find, run, and design AI workflows from ChatGPT and Codex.",
+        "longDescription": "Connect your iBlueprint account to find authorized Blueprints, inspect their inputs, run workflows on request, review results, and propose safely validated edits.",
+        "developerName": "Illuminare Scientia",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "websiteURL": "https://iblueprint.ai",
+        "defaultPrompt": [
+          "Find the iBlueprint workflow I use for weekly reporting.",
+          "Show the required inputs for my customer onboarding Blueprint.",
+          "Explain why my latest iBlueprint run failed."
+        ]
+      }
+    }
+  }
+}

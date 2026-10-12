@@ -1,0 +1,6 @@
+{
+  "executionId": "9e8d7c6b-5a4f-4e3d-8c2b-1a0f9e8d7c6b",
+  "status": "running",
+  "title": "Customer Onboarding",
+  "totalSteps": 5
+}

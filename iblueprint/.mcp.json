@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "iblueprint": {
+      "type": "http",
+      "url": "https://api.iblueprint.ai/api/mcp"
+    }
+  }
+}

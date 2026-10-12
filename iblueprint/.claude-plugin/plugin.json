@@ -1,0 +1,30 @@
+{
+  "name": "iblueprint",
+  "displayName": "iBlueprint",
+  "version": "0.1.0",
+  "description": "Find, run, debug, and edit your iBlueprint Blueprints. Signs in to your iBlueprint account in the browser.",
+  "author": {
+    "name": "Illuminare Scientia",
+    "url": "https://iblueprint.ai"
+  },
+  "homepage": "https://iblueprint.ai",
+  "repository": "https://github.com/iBlueprintAI/iblueprint-plugins",
+  "license": "MIT",
+  "keywords": [
+    "iblueprint",
+    "blueprints",
+    "workflows",
+    "automation",
+    "mcp",
+    "knowledge base",
+    "memory",
+    "data",
+    "chatbot",
+    "projects",
+    "governance"
+  ],
+  "icon": "./assets/icon.png",
+  "supportUrl": "https://iblueprint.ai/support",
+  "privacyPolicyUrl": "https://iblueprint.ai/privacy",
+  "termsOfServiceUrl": "https://iblueprint.ai/terms"
+}

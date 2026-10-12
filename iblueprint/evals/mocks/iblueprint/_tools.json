@@ -1,0 +1,1267 @@
+{
+  "tools": [
+    {
+      "name": "get_profile",
+      "title": "Get profile",
+      "description": "Return the profile represented by the authenticated iBlueprint credentials for this request.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "description": "Stable opaque identifier for the authenticated iBlueprint profile."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the authenticated profile."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address for display only."
+          },
+          "nickname": {
+            "type": "string",
+            "description": "A label that helps distinguish connected accounts."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Get profile",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      },
+      "securitySchemes": [
+        {
+          "type": "oauth2",
+          "scopes": []
+        }
+      ],
+      "_meta": {
+        "openai/profile": true
+      }
+    },
+    {
+      "name": "list_node_types",
+      "title": "List node types",
+      "description": "List every Blueprint node type the runtime supports with its category, runtime status, and summary.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Optional category filter, e.g. \"Core\", \"Data\", \"Agent Orchestration\"."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List node types",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_node_type",
+      "title": "Get node type contract",
+      "description": "Get the config shape and usage rules for one node type. Call this before adding a node or changing its config.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Canonical node type, e.g. \"api\", \"agent\", \"json-loop\"."
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "annotations": {
+        "title": "Get node type contract",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "import_curl",
+      "title": "Import cURL command",
+      "description": "Translate a cURL command into API-node config that sends the same request, using the same importer as the editor's \"Import from cURL\". Call this whenever the user pastes a cURL command or asks a node to match one; do not translate cURL by hand. Returns config to put in an api node (update_node set.config merges it), the blueprint secrets to create (credentials become $env:NAME references and are never returned), and notes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The cURL command exactly as the user pasted it."
+          }
+        },
+        "required": [
+          "command"
+        ]
+      },
+      "annotations": {
+        "title": "Import cURL command",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_blueprint",
+      "title": "Get blueprint outline",
+      "description": "Get the outline of a Blueprint: title, description, and every node id, type, title, parent loop, and outgoing connection. Use get_node for a node's config.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID. Optional in the editor, where it defaults to the open canvas."
+          }
+        }
+      },
+      "annotations": {
+        "title": "Get blueprint outline",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_node",
+      "title": "Get node",
+      "description": "Get one node's full configuration plus its incoming and outgoing connections.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "type": "string",
+            "description": "Node id from the blueprint."
+          },
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID. Optional in the editor, where it defaults to the open canvas."
+          }
+        },
+        "required": [
+          "nodeId"
+        ]
+      },
+      "annotations": {
+        "title": "Get node",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_agents",
+      "title": "List agents",
+      "description": "List saved agents in the organization (own and shared) with whether each is ready to run. Use these ids for agent node config.agentId.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional case-insensitive text filter on name and description."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization UUID. Optional; defaults to the current organization."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List agents",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_agent_readiness",
+      "title": "Check agent readiness",
+      "description": "Check whether a saved agent can run with a given tool and MCP selection, and list the tools its profile allows.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "type": "string",
+            "description": "Agent UUID from list_agents."
+          },
+          "toolIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional tool UUIDs the node would allow."
+          },
+          "mcpServerIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional MCP server UUIDs the node would use."
+          }
+        },
+        "required": [
+          "agentId"
+        ]
+      },
+      "annotations": {
+        "title": "Check agent readiness",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_tools",
+      "title": "List tools",
+      "description": "List verified tools available to the organization. Use these ids for agent_tool, composed_tool, and agent allowedTools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional case-insensitive text filter on name and description."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization UUID. Optional; defaults to the current organization."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List tools",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_mcp_servers",
+      "title": "List MCP servers",
+      "description": "List MCP servers the user can use. Use these ids for agent mcpServerIds and these URLs for mcp node serverUrl.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional case-insensitive text filter on name and description."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List MCP servers",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_knowledge_bases",
+      "title": "List knowledge bases",
+      "description": "List knowledge bases available to the organization. Use these ids for kb inputs, outputs, and knowledge-base nodes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional case-insensitive text filter on name and description."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization UUID. Optional; defaults to the current organization."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List knowledge bases",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_environment_variables",
+      "title": "List environment variables",
+      "description": "List the blueprint's environment variables (names and whether each is a secret; values are never returned). Reference one in a node config as $env:NAME.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID. Optional in the editor, where it defaults to the open canvas."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List environment variables",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "validate_operations",
+      "title": "Validate blueprint edits",
+      "description": "Validate proposed edit operations against the operation schema and the current blueprint: unknown ids, broken branches, nested loops, and pauses inside loops.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "The operations you intend to return."
+          },
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID. Optional in the editor, where it defaults to the open canvas."
+          }
+        },
+        "required": [
+          "operations"
+        ]
+      },
+      "annotations": {
+        "title": "Validate blueprint edits",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_organizations",
+      "title": "List organizations",
+      "description": "List the organizations the user belongs to, with their role, and which one is current. Pass one of these ids as organizationId to the tools that need it, such as list_agents and list_tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List organizations",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_blueprints",
+      "title": "List blueprints",
+      "description": "List the Blueprints the user can see, newest first, with id, title, description, status, and links to its page (url) and editor (editorUrl). Use search to filter by name, description, or category.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional text filter."
+          },
+          "page": {
+            "type": "number",
+            "description": "Page number, starting at 1. Default 1."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Results per page, 1-100. Default 20."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List blueprints",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_blueprint_inputs",
+      "title": "Get blueprint inputs",
+      "description": "Get the input variables a Blueprint expects (name, type, description, default) before calling run_blueprint, and whether the user may run it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID, from list_blueprints."
+          }
+        },
+        "required": [
+          "blueprintId"
+        ]
+      },
+      "annotations": {
+        "title": "Get blueprint inputs",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "run_blueprint",
+      "title": "Run blueprint",
+      "description": "Start a run of a saved Blueprint and return its executionId and a link to the run (url) at once; the run continues in the background. Follow it with get_execution. Runs use the user's AI connections and count toward their compute budget.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID, from list_blueprints."
+          },
+          "variables": {
+            "type": "object",
+            "description": "Input values keyed by variable name. See get_blueprint_inputs."
+          },
+          "connectionId": {
+            "type": "string",
+            "description": "Optional AI connection id; defaults to the user's default connection."
+          },
+          "modelId": {
+            "type": "string",
+            "description": "Optional model override for prompt nodes."
+          }
+        },
+        "required": [
+          "blueprintId"
+        ]
+      },
+      "annotations": {
+        "title": "Run blueprint",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_execution",
+      "title": "Get run status",
+      "description": "Get a run's status, progress, per-step results, recent logs, and why it is blocked if it is. Poll until status is completed, failed, or cancelled; a run waiting on a person reports awaitingInput. Includes a link to the run in iBlueprint (url).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "executionId": {
+            "type": "string",
+            "description": "Execution UUID, from run_blueprint or list_executions."
+          }
+        },
+        "required": [
+          "executionId"
+        ]
+      },
+      "annotations": {
+        "title": "Get run status",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_executions",
+      "title": "List runs",
+      "description": "List recent runs, newest first. With blueprintId, lists that blueprint's runs the user can see; otherwise the user's own runs.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Optional Blueprint UUID to filter by."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Number of runs, 1-50. Default 10."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List runs",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "apply_blueprint_operations",
+      "title": "Save blueprint edits",
+      "description": "Save edit operations to a Blueprint. All operations are checked first and nothing is saved if any fails. The current content is saved as a named version before the change, so the user can restore it from version history. Run validate_operations first and show the user the change before saving.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "blueprintId": {
+            "type": "string",
+            "description": "Blueprint UUID."
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Edit operations, as accepted by validate_operations: add_node, update_node, delete_node, add_edge, delete_edge, set_agent_prompt, rename_blueprint."
+          },
+          "summary": {
+            "type": "string",
+            "description": "One line describing the change, stored on the backup version."
+          }
+        },
+        "required": [
+          "blueprintId",
+          "operations"
+        ]
+      },
+      "annotations": {
+        "title": "Save blueprint edits",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create_blueprint",
+      "title": "Create blueprint",
+      "description": "Create a new private draft Blueprint, optionally with nodes built from edit operations (the same ones validate_operations accepts; there is no existing node to reference). Returns its id and a link to open it in the editor.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Blueprint title."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization UUID from list_organizations. Defaults to the user's personal workspace."
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Edit operations, as accepted by validate_operations: add_node, update_node, delete_node, add_edge, delete_edge, set_agent_prompt, rename_blueprint."
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "annotations": {
+        "title": "Create blueprint",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_prompts",
+      "title": "List prompts",
+      "description": "List prompts in the iBlueprint prompt library, newest first, with id, title, description, tags, and a link (url). By default lists the user's own prompts; set mine to false to include public prompts. Use get_prompt for a prompt's text.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional text filter on title and description."
+          },
+          "mine": {
+            "type": "boolean",
+            "description": "Only the user's own prompts. Default true."
+          },
+          "page": {
+            "type": "number",
+            "description": "Page number, starting at 1. Default 1."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Results per page, 1-50. Default 20."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List prompts",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_prompt",
+      "title": "Get prompt",
+      "description": "Get a prompt's full text from the iBlueprint prompt library, with its title, description, tags, and a link (url). Placeholders in the text look like {{variable}}.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "promptId": {
+            "type": "string",
+            "description": "Prompt UUID, from list_prompts."
+          }
+        },
+        "required": [
+          "promptId"
+        ]
+      },
+      "annotations": {
+        "title": "Get prompt",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "create_prompt",
+      "title": "Create prompt",
+      "description": "Save a new private prompt to the user's iBlueprint prompt library. Use {{variable}} for placeholders. Returns its id and a link (url). Only save when the user asked you to.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Prompt title, up to 200 characters."
+          },
+          "content": {
+            "type": "string",
+            "description": "The prompt text."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional one-line description."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional tags."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Optional organization UUID from list_organizations, to share the prompt with that organization. Omit to keep it personal."
+          }
+        },
+        "required": [
+          "title",
+          "content"
+        ]
+      },
+      "annotations": {
+        "title": "Create prompt",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update_prompt",
+      "title": "Update prompt",
+      "description": "Save a new version of an existing prompt the user can edit: its text, title, description, or tags. The previous version stays in the prompt's history in iBlueprint. Show the user the change and save only once they agree.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "promptId": {
+            "type": "string",
+            "description": "Prompt UUID, from list_prompts."
+          },
+          "content": {
+            "type": "string",
+            "description": "New prompt text. Omit to keep the current text."
+          },
+          "title": {
+            "type": "string",
+            "description": "New title. Omit to keep it."
+          },
+          "description": {
+            "type": "string",
+            "description": "New description. Omit to keep it."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "New tags, replacing the current ones. Omit to keep them."
+          }
+        },
+        "required": [
+          "promptId"
+        ]
+      },
+      "annotations": {
+        "title": "Update prompt",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_knowledge_base_documents",
+      "title": "List knowledge base documents",
+      "description": "List the documents in a knowledge base, grouped by document set (folder), with each document's id, name, type, size, and processing status. Use get_knowledge_base_document to read one, or search_knowledge_base to find passages.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "knowledgeBaseId": {
+            "type": "string",
+            "description": "Knowledge base UUID, from list_knowledge_bases."
+          },
+          "search": {
+            "type": "string",
+            "description": "Optional case-insensitive filter on document names."
+          }
+        },
+        "required": [
+          "knowledgeBaseId"
+        ]
+      },
+      "annotations": {
+        "title": "List knowledge base documents",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_knowledge_base_document",
+      "title": "Read knowledge base document",
+      "description": "Read a knowledge base document's extracted text, 12,000 characters at a time. When more remains, the result has nextOffset; call again with that offset to continue.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "documentId": {
+            "type": "string",
+            "description": "Document UUID, from list_knowledge_base_documents or search_knowledge_base."
+          },
+          "offset": {
+            "type": "number",
+            "description": "Character offset to start from. Default 0."
+          }
+        },
+        "required": [
+          "documentId"
+        ]
+      },
+      "annotations": {
+        "title": "Read knowledge base document",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "search_knowledge_base",
+      "title": "Search knowledge base",
+      "description": "Find the passages in a knowledge base most relevant to a query, using the same search as iBlueprint chatbots and agents. Returns each passage with its document id and name and a relevance score (0-100). Read a whole document with get_knowledge_base_document.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "knowledgeBaseId": {
+            "type": "string",
+            "description": "Knowledge base UUID, from list_knowledge_bases."
+          },
+          "query": {
+            "type": "string",
+            "description": "What to look for, in natural language."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Maximum passages, 1-20. Default 8."
+          }
+        },
+        "required": [
+          "knowledgeBaseId",
+          "query"
+        ]
+      },
+      "annotations": {
+        "title": "Search knowledge base",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_projects",
+      "title": "List projects",
+      "description": "List the iBlueprint projects the user belongs to, with id, name, description, their role, and a link (url).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "description": "Optional text filter on the project name."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Optional organization UUID from list_organizations."
+          }
+        }
+      },
+      "annotations": {
+        "title": "List projects",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "create_project",
+      "title": "Create project",
+      "description": "Create a new iBlueprint project, where goals and tasks are planned. The user becomes its owner. Returns its id and a link (url).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Project name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description."
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Organization UUID from list_organizations. Defaults to the user's current organization."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "annotations": {
+        "title": "Create project",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_goals",
+      "title": "List project goals",
+      "description": "List a project's goals with id, title, status, dates, and progress (share of tasks done).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project UUID, from list_projects."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "completed",
+              "cancelled"
+            ],
+            "description": "Optional status filter."
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      },
+      "annotations": {
+        "title": "List project goals",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "create_goal",
+      "title": "Create project goal",
+      "description": "Add a goal to a project: what the project should achieve, with optional dates. New goals start as drafts. Add the work toward it with create_task, passing the goal's id.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project UUID, from list_projects."
+          },
+          "title": {
+            "type": "string",
+            "description": "Short goal title, up to 500 characters."
+          },
+          "description": {
+            "type": "string",
+            "description": "What the goal is and how success is measured."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Optional start date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Optional target date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          }
+        },
+        "required": [
+          "projectId",
+          "title",
+          "description"
+        ]
+      },
+      "annotations": {
+        "title": "Create project goal",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update_goal",
+      "title": "Update project goal",
+      "description": "Change a goal's title, description, dates, or status (draft, active, completed, cancelled). Only the fields given change.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "goalId": {
+            "type": "string",
+            "description": "Goal UUID, from list_goals."
+          },
+          "title": {
+            "type": "string",
+            "description": "New title."
+          },
+          "description": {
+            "type": "string",
+            "description": "New description."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "completed",
+              "cancelled"
+            ],
+            "description": "New status."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "New start date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "New target date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          }
+        },
+        "required": [
+          "goalId"
+        ]
+      },
+      "annotations": {
+        "title": "Update project goal",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "list_tasks",
+      "title": "List project tasks",
+      "description": "List a project's tasks with id, title, status, priority, goal, assignee, and due date. Filter by goal, status, or text.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project UUID, from list_projects."
+          },
+          "goalId": {
+            "type": "string",
+            "description": "Optional goal UUID to list only that goal's tasks."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in_progress",
+              "review",
+              "blocked",
+              "done"
+            ],
+            "description": "Optional status filter."
+          },
+          "search": {
+            "type": "string",
+            "description": "Optional text filter on the title."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Maximum tasks, 1-100. Default 50."
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      },
+      "annotations": {
+        "title": "List project tasks",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "get_task",
+      "title": "Get project task",
+      "description": "Get one task in full: description, status, priority, goal, assignee, dates, dependencies, and agent instructions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "description": "Task UUID, from list_tasks."
+          }
+        },
+        "required": [
+          "taskId"
+        ]
+      },
+      "annotations": {
+        "title": "Get project task",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "create_task",
+      "title": "Create project task",
+      "description": "Add a task to a project, optionally under a goal or a parent task. To assign it to an agent, pass assigneeType \"agent\", the agent's id from list_agents, and agentPrompt with its instructions. Returns the task's id.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Project UUID, from list_projects."
+          },
+          "title": {
+            "type": "string",
+            "description": "Task title, up to 500 characters."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional details."
+          },
+          "goalId": {
+            "type": "string",
+            "description": "Optional goal UUID this task works toward."
+          },
+          "parentTaskId": {
+            "type": "string",
+            "description": "Optional parent task UUID, to make this a subtask."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in_progress",
+              "review",
+              "blocked",
+              "done"
+            ],
+            "description": "Default todo."
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "urgent"
+            ],
+            "description": "Default medium."
+          },
+          "assigneeType": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent"
+            ],
+            "description": "Who the task is for."
+          },
+          "assigneeId": {
+            "type": "string",
+            "description": "User or agent UUID, with assigneeType."
+          },
+          "agentPrompt": {
+            "type": "string",
+            "description": "Instructions for an assigned agent."
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "Optional due date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional tags."
+          }
+        },
+        "required": [
+          "projectId",
+          "title"
+        ]
+      },
+      "annotations": {
+        "title": "Create project task",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "update_task",
+      "title": "Update project task",
+      "description": "Change a task: status (todo, in_progress, review, blocked, done), priority, title, description, assignee, agent instructions, or due date. Only the fields given change. Mark work finished by setting status to done. As in the app, moving a task assigned to an agent or linked to a blueprint to in_progress starts that work; the result then has executionQueued.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "description": "Task UUID, from list_tasks."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in_progress",
+              "review",
+              "blocked",
+              "done"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "urgent"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assigneeType": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent"
+            ]
+          },
+          "assigneeId": {
+            "type": "string",
+            "description": "User or agent UUID, with assigneeType."
+          },
+          "agentPrompt": {
+            "type": "string",
+            "description": "New instructions for an assigned agent."
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "New due date, as an ISO 8601 date-time such as 2026-11-01T00:00:00Z."
+          }
+        },
+        "required": [
+          "taskId"
+        ]
+      },
+      "annotations": {
+        "title": "Update project task",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "add_task_note",
+      "title": "Add task note",
+      "description": "Add a note to a task's activity, such as a progress update, a decision, or a question for the team.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "description": "Task UUID, from list_tasks."
+          },
+          "note": {
+            "type": "string",
+            "description": "The note, up to 10,000 characters."
+          }
+        },
+        "required": [
+          "taskId",
+          "note"
+        ]
+      },
+      "annotations": {
+        "title": "Add task note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "chat_with_agent",
+      "title": "Chat with agent",
+      "description": "Send a message to an iBlueprint agent and get its reply. Without conversationId this starts a new conversation with agentId (from list_agents); pass the returned conversationId to continue it. The agent answers using its own instructions, knowledge, and tools, and may take actions those tools allow, such as sending email. Replies that take longer than 25 seconds come back as status \"running\": wait, then read the reply with get_agent_conversation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "type": "string",
+            "description": "Agent UUID from list_agents. Required to start a conversation."
+          },
+          "conversationId": {
+            "type": "string",
+            "description": "Continue this conversation instead of starting a new one."
+          },
+          "message": {
+            "type": "string",
+            "description": "Your message to the agent, up to 10,000 characters."
+          },
+          "taskId": {
+            "type": "string",
+            "description": "Optional project task assigned to this agent, to link a new conversation to it."
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "annotations": {
+        "title": "Chat with agent",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_agent_conversation",
+      "title": "Read agent conversation",
+      "description": "Read the latest messages of a conversation with an agent, and whether the agent is still working on a reply (lastRunStatus \"running\") or its last turn failed (lastError).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": "string",
+            "description": "Conversation UUID, from chat_with_agent or list_agent_conversations."
+          },
+          "limit": {
+            "type": "number",
+            "description": "Latest messages to return, 1-50. Default 10."
+          }
+        },
+        "required": [
+          "conversationId"
+        ]
+      },
+      "annotations": {
+        "title": "Read agent conversation",
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_agent_conversations",
+      "title": "List agent conversations",
+      "description": "List conversations with an agent, newest first, with id, title, last run status, and linked task. Continue one with chat_with_agent and its conversationId.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "agentId": {
+            "type": "string",
+            "description": "Agent UUID from list_agents."
+          }
+        },
+        "required": [
+          "agentId"
+        ]
+      },
+      "annotations": {
+        "title": "List agent conversations",
+        "readOnlyHint": true
+      }
+    }
+  ]
+}

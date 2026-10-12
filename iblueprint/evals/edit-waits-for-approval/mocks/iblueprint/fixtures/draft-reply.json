@@ -1,0 +1,22 @@
+{
+  "node": {
+    "id": "draft-reply",
+    "type": "prompt",
+    "title": "Draft reply",
+    "config": {
+      "promptText": "Write a friendly reply to this ticket: {{steps.classify.output}}"
+    }
+  },
+  "incoming": [
+    {
+      "source": "classify",
+      "connectionType": "next"
+    }
+  ],
+  "outgoing": [
+    {
+      "target": "send",
+      "connectionType": "next"
+    }
+  ]
+}
