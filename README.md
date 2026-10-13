@@ -28,6 +28,8 @@ claude plugin install iblueprint@iblueprint
 
 On claude.ai and in Cowork, add iBlueprint from the directory. The [plugin's README](iblueprint/README.md) covers signing in, what the plugin can access, and the full list of tools.
 
+Anthropic directory listing metadata lives in [the Claude plugin manifest](iblueprint/.claude-plugin/plugin.json), including `documentationUrl` pointing to [the public iBlueprint documentation](https://docs.iblueprint.ai/). Keep these fields in the plugin manifest, not the marketplace entry.
+
 ### OpenAI ChatGPT and Codex
 
 The [OpenAI marketplace catalog](.agents/plugins/marketplace.json) points to the shared [Agent Plugins package](iblueprint/plugin.json).

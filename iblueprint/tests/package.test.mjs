@@ -50,6 +50,20 @@ describe('iBlueprint marketplaces', () => {
   });
 });
 
+describe('iBlueprint Anthropic directory listing', () => {
+  it('includes public documentation and the other directory listing URLs', async () => {
+    const manifest = await readJson('.claude-plugin/plugin.json');
+
+    assert.equal(manifest.documentationUrl, 'https://docs.iblueprint.ai/');
+    for (const field of ['documentationUrl', 'supportUrl', 'privacyPolicyUrl', 'termsOfServiceUrl']) {
+      const url = new URL(manifest[field]);
+      assert.equal(url.protocol, 'https:');
+      assert.equal(url.username, '');
+      assert.equal(url.password, '');
+    }
+  });
+});
+
 describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
   it('has portable metadata and an OpenAI onboarding skill', async () => {
     const manifest = await readJson('plugin.json');

@@ -24,6 +24,7 @@
     "governance"
   ],
   "icon": "./assets/icon.png",
+  "documentationUrl": "https://docs.iblueprint.ai/",
   "supportUrl": "https://iblueprint.ai/support",
   "privacyPolicyUrl": "https://iblueprint.ai/privacy",
   "termsOfServiceUrl": "https://iblueprint.ai/terms"
