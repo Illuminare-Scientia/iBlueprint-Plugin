@@ -1,6 +1,6 @@
 ---
 name: iblueprint
-description: Run, inspect, and design iBlueprint Blueprints, use and save prompts, look up content in knowledge bases, plan project goals and tasks, and chat with iBlueprint agents, through the iblueprint MCP server. Use when the user mentions iBlueprint, a blueprint or its runs, a saved prompt, a knowledge base, an iBlueprint project, goal, or task, or one of their iBlueprint agents, or asks a question their iBlueprint knowledge base should answer.
+description: Run, inspect, and design iBlueprint Blueprints, use prompts and knowledge bases, plan projects, chat with agents, and manage an organization's AI Workforce and AI Employees through the iblueprint MCP server. Use when the user mentions iBlueprint, a blueprint or run, a saved prompt, a knowledge base, an iBlueprint project or agent, AI Workforce, AI Employee, assignment, AI Salary, workforce meeting, or workforce workstation.
 ---
 
 # Working with iBlueprint
@@ -29,6 +29,30 @@ Step outputs are truncated in tool results. If the user needs the full output, g
 ## Links
 
 Results include links into the iBlueprint app: `url` for a blueprint's page or a run's page, and `editorUrl` for a blueprint's editor. Give the user these links whenever you mention a blueprint or run they may want to open. Never build an iBlueprint URL yourself; if a result has no link, say where to find the item in the app instead.
+
+## Manage an AI Workforce
+
+Workforce tools start with `workforce_` and use the same organization membership, employee scope, feature flags, and permissions as Workforce Studio.
+
+1. Call `list_organizations` and use an organization id it returns.
+2. Call `workforce_get_my_capabilities`, then `workforce_overview` or `workforce_list_employees`. If the needed capability or feature is unavailable, stop and explain that instead of trying another route.
+3. Use ids returned by the matching list or get tool. Never invent an employee, assignment, question, meeting, tool, workstation, learning, or delegation id.
+4. Read the current record before changing it. Call a write tool only when the user asked for that change, and never automatically retry a failed write.
+
+Use the focused tool family for the job:
+
+- Directory and lifecycle: employees, departments, promotion, onboarding, certification, revisions, upgrades, health, and audit timeline.
+- AI Salary: rate cards, salary profiles, employee and roster totals, usage events, and reconciliation.
+- Work: assignments, policy, human questions, memory, conversations, and messages.
+- Communications: email, Slack, outbound approvals, mailbox sync, calendars, meetings, and voice.
+- Execution: employee-authored tools, local or VM workstations, bindings, and live CLI sessions.
+- Improvement: learning events, knowledge scopes, delegations, performance, and feedback.
+
+Treat lifecycle transitions, cancellation, revocation, redaction, rollback, external communication, meeting participation, and live CLI control as consequential. Show the current state and the requested change before acting unless the user already gave specific approval. For assignments, list current assignments first to avoid duplicates; create or dispatch work only when the user wants it started. For questions and outbound messages, preserve the user's wording and approval boundaries.
+
+AI Salary is AI operating cost per active minute or hour. It is not human payroll, subscription billing, iBlueprint credits, a provider quota, or business accounting. Preserve `unknown` and `mixed` cost states; never present missing provider, local-compute, or storage pricing as zero.
+
+Connected email, Slack, calendar, meeting, agent, and workstation actions can affect people or external systems. Use them only for the user's requested purpose. Never put passwords, tokens, API keys, or other secrets into a message or live CLI input.
 
 ## Use a saved prompt
 

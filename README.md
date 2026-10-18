@@ -1,10 +1,10 @@
 # iBlueprint plugins
 
-Plugins that connect AI assistants to [iBlueprint](https://iblueprint.ai), so you can run and edit your Blueprints, use your prompts and knowledge bases, plan projects, and chat with your agents without leaving the assistant.
+Plugins that connect AI assistants to [iBlueprint](https://iblueprint.ai), so you can run and edit Blueprints, use prompts and knowledge bases, plan projects, chat with agents, and manage your authorized AI Workforce without leaving the assistant.
 
 | Plugin | What it does |
 | --- | --- |
-| [iblueprint](iblueprint/) | Find, run, debug, and edit Blueprints; use and save prompts; answer from knowledge bases; plan project goals and tasks; chat with agents |
+| [iblueprint](iblueprint/) | Run and edit Blueprints; use prompts and knowledge bases; plan projects; chat with agents; manage AI Employees, assignments, AI Salary, communications, meetings, workstations, learning, and performance |
 
 ## Supported hosts
 

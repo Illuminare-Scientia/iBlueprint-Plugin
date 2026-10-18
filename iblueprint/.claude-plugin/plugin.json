@@ -1,8 +1,8 @@
 {
   "name": "iblueprint",
   "displayName": "iBlueprint",
-  "version": "0.1.0",
-  "description": "Find, run, debug, and edit your iBlueprint Blueprints. Signs in to your iBlueprint account in the browser.",
+  "version": "0.2.0",
+  "description": "Run and edit iBlueprint workflows and manage your authorized AI Workforce. Signs in to your iBlueprint account in the browser.",
   "author": {
     "name": "Illuminare Scientia",
     "url": "https://iblueprint.ai"
@@ -21,7 +21,9 @@
     "data",
     "chatbot",
     "projects",
-    "governance"
+    "governance",
+    "ai workforce",
+    "ai employees"
   ],
   "icon": "./assets/icon.png",
   "documentationUrl": "https://docs.iblueprint.ai/",

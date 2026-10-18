@@ -75,6 +75,38 @@ describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
     await readFile(resolve(pluginRoot, openai.onboardingSkill), 'utf8');
   });
 
+  it('advertises the Workforce surface and keeps host versions aligned', async () => {
+    const manifest = await readJson('plugin.json');
+    const claude = await readJson('.claude-plugin/plugin.json');
+    const extension = await readRepositoryJson('gemini-extension.json');
+    const skill = await readFile(resolve(pluginRoot, 'skills/iblueprint/SKILL.md'), 'utf8');
+    const readme = await readFile(resolve(pluginRoot, 'README.md'), 'utf8');
+
+    assert.equal(manifest.version, '0.2.0');
+    assert.equal(claude.version, manifest.version);
+    assert.equal(extension.version, manifest.version);
+    assert.match(manifest.description, /Workforce/);
+    assert.ok(manifest.keywords.includes('ai workforce'));
+    assert.ok(manifest.extensions['com.openai'].interface.defaultPrompt.some((prompt) => /Workforce/.test(prompt)));
+    for (const tool of ['workforce_get_my_capabilities', 'workforce_overview', 'workforce_list_employees']) {
+      assert.match(skill, new RegExp(`\\b${tool}\\b`));
+    }
+    assert.match(skill, /AI Salary is AI operating cost/);
+    assert.match(readme, /AI Workforce/);
+  });
+
+  it('keeps all Workforce MCP endpoints in the eval tool snapshot', async () => {
+    const snapshot = await readJson('evals/mocks/iblueprint/_tools.json');
+    const workforceTools = snapshot.tools.filter((tool) => tool.name.startsWith('workforce_'));
+
+    assert.equal(workforceTools.length, 114);
+    assert.ok(workforceTools.every((tool) => tool.inputSchema.type === 'object'));
+    assert.ok(workforceTools.every((tool) => tool.securitySchemes?.[0]?.type === 'oauth2'));
+    for (const name of ['workforce_get_my_capabilities', 'workforce_create_assignment', 'workforce_record_employee_feedback']) {
+      assert.ok(workforceTools.some((tool) => tool.name === name), name);
+    }
+  });
+
   it('uses Copilot-supported portable discovery without host-specific executable components', async () => {
     const manifest = await readJson('plugin.json');
 

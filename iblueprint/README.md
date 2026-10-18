@@ -1,6 +1,6 @@
 # iBlueprint
 
-Find, run, debug, and edit your [iBlueprint](https://iblueprint.ai) Blueprints, use and save prompts, answer questions from your knowledge bases, plan project goals and tasks, and chat with your agents, from Claude, ChatGPT, Codex, GitHub Copilot, or Gemini CLI. Ask for a Blueprint by name, and the assistant checks which inputs it needs, runs it, follows the run, and reports the result. It can also explain why a run failed, or design a change to a Blueprint and save it once you agree. It can fill in and use a prompt from your prompt library, save new prompts to it, and it can search or read the documents in your knowledge bases and answer with the sources it used. It can set goals in your projects, break them into tasks, keep those tasks up to date, and pass messages to your iBlueprint agents and relay their replies.
+Find, run, debug, and edit your [iBlueprint](https://iblueprint.ai) Blueprints; use prompts and knowledge bases; plan projects; chat with agents; and manage your organization's authorized AI Workforce from Claude, ChatGPT, Codex, GitHub Copilot, or Gemini CLI. Workforce tools cover AI Employees, departments, onboarding and lifecycle, AI Salary, assignments, human questions, memory, communications, meetings, employee-authored tools, workstations, learning, delegation, and performance. All calls use the same account permissions and feature gates as the iBlueprint app.
 
 ## What you need
 
@@ -15,8 +15,8 @@ When the assistant first uses iBlueprint, complete your host's browser-based sig
 
 The plugin contains no code that runs on your machine. It has two parts:
 
-- **Skills** (`skills/iblueprint`, `skills/setup`): instructions that tell the assistant to run a Blueprint only when you ask, and only once. They also tell it to ask for missing inputs rather than invent them, and to show you an edit before saving it.
-- **The iBlueprint MCP server** at `https://api.iblueprint.ai/api/mcp`. Every tool call goes there, authenticated as you. The tools read your organizations, Blueprints, prompts, projects, goals, tasks, agents and their conversations, tools, run history, and knowledge bases, including the text of their documents. They change something only when the assistant calls a write tool: `run_blueprint`, `apply_blueprint_operations`, `create_blueprint`, `create_prompt`, `update_prompt`, `create_project`, `create_goal`, `update_goal`, `create_task`, `update_task`, `add_task_note`, or `chat_with_agent`. An agent you message can act through its own tools, such as sending email. Nothing can be deleted through the plugin. Saved prompts are private unless you share them with an organization. Before an edit is saved, the current Blueprint is stored as a version you can restore.
+- **Skills** (`skills/iblueprint`, `skills/setup`): instructions that tell the assistant to read current state, use ids returned by iBlueprint, and perform a run or write only when you ask. They also distinguish AI Salary operating cost from payroll and billing.
+- **The iBlueprint MCP server** at `https://api.iblueprint.ai/api/mcp`. Every tool call goes there, authenticated as you. The tools can read the iBlueprint resources your account may access, including Workforce records, employee memory and conversations, salary and usage records, communication status, meetings, and workstation sessions. Write tools can run workflows; update Blueprints, prompts, projects, agents, and Workforce state; start or cancel assignments; answer questions; send approved communications; change lifecycle state; redact memory; control connected meetings or workstations; and revoke or roll back supported resources. The server enforces organization and employee authorization on every call. Connected agents and Workforce tools may act in external systems when the user requests it.
 
 Nothing is sent anywhere other than iBlueprint. See the [privacy policy](https://iblueprint.ai/privacy), the [terms of service](https://iblueprint.ai/terms), and [support](https://iblueprint.ai/support).
 
@@ -37,6 +37,7 @@ Nothing is sent anywhere other than iBlueprint. See the [privacy policy](https:/
 | Knowledge bases | `list_knowledge_bases`, `list_knowledge_base_documents`, `get_knowledge_base_document`, `search_knowledge_base` | |
 | Projects | `list_projects`, `list_goals`, `list_tasks`, `get_task` | `create_project`, `create_goal`, `update_goal`, `create_task`, `update_task`, `add_task_note` |
 | Agents | `list_agents`, `get_agent_conversation`, `list_agent_conversations` | `chat_with_agent` |
+| AI Workforce | `workforce_get_my_capabilities`, `workforce_overview`, and all focused `workforce_list_*` / `workforce_get_*` tools | Focused `workforce_*` actions for lifecycle, salary, assignments, questions, communications, meetings, tools, workstations, learning, delegation, and feedback |
 
 ## Development
 
