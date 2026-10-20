@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { describe, it } from 'node:test';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const pluginRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -14,6 +16,45 @@ async function readJson(relativePath) {
 async function readRepositoryJson(relativePath) {
   return JSON.parse(await readFile(resolve(repositoryRoot, relativePath), 'utf8'));
 }
+
+describe('iBlueprint Claude directory submission', () => {
+  it('packages only Claude runtime files and preserves their contents on repeated builds', async () => {
+    const temporaryDirectory = await mkdtemp(join(tmpdir(), 'iblueprint-submission-test-'));
+    try {
+      const archivePath = join(temporaryDirectory, 'submission.zip');
+      const expectedFiles = [
+        '.claude-plugin/marketplace.json',
+        'LICENSE',
+        'README.md',
+        'iblueprint/.claude-plugin/plugin.json',
+        'iblueprint/.mcp.json',
+        'iblueprint/LICENSE',
+        'iblueprint/README.md',
+        'iblueprint/assets/icon.png',
+        'iblueprint/skills/setup/SKILL.md',
+        'iblueprint/skills/iblueprint/SKILL.md',
+      ].sort();
+
+      for (let build = 0; build < 2; build += 1) {
+        execFileSync(process.execPath, [resolve(repositoryRoot, 'scripts/package-claude.mjs'), archivePath], {
+          cwd: temporaryDirectory,
+        });
+        const entries = execFileSync('unzip', ['-Z1', archivePath], { encoding: 'utf8' })
+          .trim().split('\n').sort();
+        assert.deepEqual(entries, expectedFiles);
+        for (const entry of entries) {
+          assert.deepEqual(
+            execFileSync('unzip', ['-p', archivePath, entry]),
+            await readFile(resolve(repositoryRoot, entry)),
+            entry,
+          );
+        }
+      }
+    } finally {
+      await rm(temporaryDirectory, { recursive: true, force: true });
+    }
+  });
+});
 
 describe('iBlueprint marketplaces', () => {
   it('resolves the Claude/Copilot entry to both packaged manifests', async () => {
