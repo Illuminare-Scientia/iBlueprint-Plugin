@@ -16,6 +16,3 @@ node_modules/
 *.swp
 *.swo
 *~
-
-# Generated Claude directory submission
-/iblueprint-claude.zip

@@ -32,17 +32,11 @@ Anthropic directory listing metadata lives in [the Claude plugin manifest](iblue
 
 #### Claude directory submission
 
-Build a runtime-only submission archive from this repository's root with Node.js and the `zip` command:
+The [Claude developer portal](https://claude.ai/directory/manage) reads the `iblueprint/` folder from this repository's `main` branch and scans each pushed commit; there is no ZIP upload. Every file in that folder counts, including `evals/` and `tests/`.
 
-```bash
-node scripts/package-claude.mjs
-```
+The directory holds a version for human review when any non-image, non-font file is 256 KiB or larger, or when the plugin has more than 512 files. The package test enforces both limits. The largest file is the eval tool snapshot, `evals/mocks/iblueprint/_tools.json`, so it is stored as compact JSON without indentation. Regenerate it the same way.
 
-Upload the resulting `iblueprint-claude.zip` when submitting a ZIP to the Claude directory. An optional output path can be passed as the command's only argument. The archive preserves the marketplace and its `iblueprint/` plugin subdirectory, and includes only Claude manifests, shared skills, the listing icon, licenses, and documentation. The build script runs locally for packaging, not during plugin installation.
-
-Do not submit the whole source tree as a ZIP: `evals/` and `tests/` are development fixtures, not runtime components. In particular, `evals/mocks/iblueprint/_tools.json` is a large JSON tool snapshot, not a binary or executable; including it can trigger `BINARIES_NOT_INSPECTED`. The archive excludes it without changing the snapshot or evaluation behavior. Repository-based installs still contain the source fixtures.
-
-The PNG icon is already in its declared format and is intentionally included. The portable `plugin.json` and other hosts' adapters remain in source but are excluded from this Claude-only archive. Browser-based OAuth remains unchanged; the plugin has no install hooks, script downloads, or local credential-reading code. Directory checks must be rerun on the new upload; packaging alone does not guarantee approval or clear unrelated policy findings.
+The PNG icon is already in its declared format. The portable `plugin.json` and other hosts' adapters are intentional; the portal only notes that Claude ignores them. Browser-based OAuth remains unchanged; the plugin has no install hooks, script downloads, or local credential-reading code.
 
 ### OpenAI ChatGPT and Codex
 

@@ -54,7 +54,7 @@ Nothing is sent anywhere other than iBlueprint. See the [privacy policy](https:/
 
 The evals answer from mocked tools in `evals/mocks/`, so they need no iBlueprint account or network access. The validation, test, and eval commands are in the [repository README](../README.md#development-and-updates).
 
-For Claude directory ZIP submissions, use the [runtime-only packaging command](../README.md#claude-directory-submission). It excludes development fixtures, including the large eval tool snapshot, while leaving them available in source for local evaluation.
+The Claude directory scans every file in this folder, including `evals/` and `tests/`, and holds a version for review when a non-image file reaches 256 KiB. Keep `evals/mocks/iblueprint/_tools.json` as compact JSON; see [Claude directory submission](../README.md#claude-directory-submission).
 
 ## License
 

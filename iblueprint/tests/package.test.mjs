@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readFile, stat } from 'node:fs/promises';
 import { describe, it } from 'node:test';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const pluginRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -17,41 +16,22 @@ async function readRepositoryJson(relativePath) {
   return JSON.parse(await readFile(resolve(repositoryRoot, relativePath), 'utf8'));
 }
 
-describe('iBlueprint Claude directory submission', () => {
-  it('packages only Claude runtime files and preserves their contents on repeated builds', async () => {
-    const temporaryDirectory = await mkdtemp(join(tmpdir(), 'iblueprint-submission-test-'));
-    try {
-      const archivePath = join(temporaryDirectory, 'submission.zip');
-      const expectedFiles = [
-        '.claude-plugin/marketplace.json',
-        'LICENSE',
-        'README.md',
-        'iblueprint/.claude-plugin/plugin.json',
-        'iblueprint/.mcp.json',
-        'iblueprint/LICENSE',
-        'iblueprint/README.md',
-        'iblueprint/assets/icon.png',
-        'iblueprint/skills/setup/SKILL.md',
-        'iblueprint/skills/iblueprint/SKILL.md',
-      ].sort();
+describe('iBlueprint Claude directory file limits', () => {
+  // The directory reads the plugin folder from GitHub and holds any version that exceeds these limits.
+  const maxFiles = 512;
+  const maxTextFileBytes = 256 * 1024;
+  const imageAndFontExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.ttf', '.otf', '.woff', '.woff2']);
 
-      for (let build = 0; build < 2; build += 1) {
-        execFileSync(process.execPath, [resolve(repositoryRoot, 'scripts/package-claude.mjs'), archivePath], {
-          cwd: temporaryDirectory,
-        });
-        const entries = execFileSync('unzip', ['-Z1', archivePath], { encoding: 'utf8' })
-          .trim().split('\n').sort();
-        assert.deepEqual(entries, expectedFiles);
-        for (const entry of entries) {
-          assert.deepEqual(
-            execFileSync('unzip', ['-p', archivePath, entry]),
-            await readFile(resolve(repositoryRoot, entry)),
-            entry,
-          );
-        }
-      }
-    } finally {
-      await rm(temporaryDirectory, { recursive: true, force: true });
+  it('keeps tracked plugin files within the count and per-file size limits', async () => {
+    const files = execFileSync('git', ['ls-files', '-z'], { cwd: pluginRoot, encoding: 'utf8' })
+      .split('\0').filter(Boolean);
+
+    assert.ok(files.includes('evals/mocks/iblueprint/_tools.json'));
+    assert.ok(files.length <= maxFiles, `${files.length} files exceed ${maxFiles}`);
+    for (const file of files) {
+      if (imageAndFontExtensions.has(extname(file).toLowerCase())) continue;
+      const { size } = await stat(resolve(pluginRoot, file));
+      assert.ok(size < maxTextFileBytes, `${file} is ${size} bytes; keep it under ${maxTextFileBytes}`);
     }
   });
 });
