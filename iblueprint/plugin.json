@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "iblueprint",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Run iBlueprint workflows and manage authorized AI Workforces from ChatGPT, Codex, and GitHub Copilot.",
   "author": {
     "name": "Illuminare Scientia",

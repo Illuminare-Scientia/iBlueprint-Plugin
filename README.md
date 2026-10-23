@@ -38,6 +38,16 @@ The directory holds a version for human review when any non-image, non-font file
 
 The PNG icon is already in its declared format. The portable `plugin.json` and other hosts' adapters are intentional; the portal only notes that Claude ignores them. Browser-based OAuth remains unchanged; the plugin has no install hooks, script downloads, or local credential-reading code.
 
+For release `0.2.1`, the Claude, portable, and Gemini manifests share the same version. Increment all three for each release so existing Claude Code marketplace installs receive the update.
+
+Before pushing a submission, run the package tests and strict validation below. On Claude Code 2.1.306 or later, also run the directory profile on a clean checkout:
+
+```bash
+claude plugin validate --profile directory --strict iblueprint
+```
+
+The validator scans local files, including ignored `.DS_Store` files and generated eval results; GitHub submissions contain only committed files. Keep local artifacts ignored and out of the submitted tree. Directory-profile validation does not run the portal's safety scan or policy review. Check the new commit's report in the developer portal after pushing; a local pass does not guarantee publication or clear a human-review hold.
+
 ### OpenAI ChatGPT and Codex
 
 The [OpenAI marketplace catalog](.agents/plugins/marketplace.json) points to the shared [Agent Plugins package](iblueprint/plugin.json).

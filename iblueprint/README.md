@@ -24,6 +24,12 @@ Nothing is sent anywhere other than iBlueprint. See the [privacy policy](https:/
 
 **Claude:** add iBlueprint from the directory. In claude.ai and Cowork it's under **Customize → Plugins**; in Claude Code, run `/plugin directory`. You can also add only the connector under **Settings → Connectors → Add custom connector** with the URL `https://api.iblueprint.ai/api/mcp`. To install from this repository's marketplace instead, see the [repository installation instructions](../README.md#install).
 
+In Claude Code 2.1.275 or later, install directly from this repository's marketplace:
+
+```text
+/plugin install iblueprint --marketplace Illuminare-Scientia/iBlueprint-Plugin
+```
+
 **OpenAI ChatGPT and Codex, GitHub Copilot, and Gemini CLI:** see the [repository installation instructions](../README.md#install) for marketplace registration, local installation, and host-specific authentication. Copilot shares this package's Agent Plugins manifest, MCP configuration, and skills. Gemini installs from the repository root and imports these skills as context.
 
 ## Tools

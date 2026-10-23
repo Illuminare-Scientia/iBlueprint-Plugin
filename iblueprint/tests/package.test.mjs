@@ -29,6 +29,11 @@ describe('iBlueprint Claude directory file limits', () => {
     assert.ok(files.includes('evals/mocks/iblueprint/_tools.json'));
     assert.ok(files.length <= maxFiles, `${files.length} files exceed ${maxFiles}`);
     for (const file of files) {
+      assert.doesNotMatch(
+        file,
+        /(^|\/)(\.DS_Store|Thumbs\.db|desktop\.ini|__MACOSX|node_modules|\.env(?:\..*)?|evals\/results)(\/|$)|(^|\/)\._|\.zip$/i,
+        `${file} must not be included in the submitted plugin`,
+      );
       if (imageAndFontExtensions.has(extname(file).toLowerCase())) continue;
       const { size } = await stat(resolve(pluginRoot, file));
       assert.ok(size < maxTextFileBytes, `${file} is ${size} bytes; keep it under ${maxTextFileBytes}`);
@@ -72,6 +77,14 @@ describe('iBlueprint marketplaces', () => {
 });
 
 describe('iBlueprint Anthropic directory listing', () => {
+  it('uses remote-only discovery without local executable configuration', async () => {
+    const manifest = await readJson('.claude-plugin/plugin.json');
+
+    for (const field of ['hooks', 'mcpServers', 'lspServers', 'userConfig']) {
+      assert.equal(Object.hasOwn(manifest, field), false, field);
+    }
+  });
+
   it('includes public documentation and the other directory listing URLs', async () => {
     const manifest = await readJson('.claude-plugin/plugin.json');
 
@@ -103,7 +116,7 @@ describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
     const skill = await readFile(resolve(pluginRoot, 'skills/iblueprint/SKILL.md'), 'utf8');
     const readme = await readFile(resolve(pluginRoot, 'README.md'), 'utf8');
 
-    assert.equal(manifest.version, '0.2.0');
+    assert.equal(manifest.version, '0.2.1');
     assert.equal(claude.version, manifest.version);
     assert.equal(extension.version, manifest.version);
     assert.match(manifest.description, /Workforce/);

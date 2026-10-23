@@ -1,7 +1,7 @@
 {
   "name": "iblueprint",
   "displayName": "iBlueprint",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Run and edit iBlueprint workflows and manage your authorized AI Workforce. Signs in to your iBlueprint account in the browser.",
   "author": {
     "name": "Illuminare Scientia",
