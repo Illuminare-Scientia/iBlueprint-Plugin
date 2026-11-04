@@ -48,6 +48,8 @@ claude plugin validate --profile directory --strict iblueprint
 
 The validator scans local files, including ignored `.DS_Store` files and generated eval results; GitHub submissions contain only committed files. Keep local artifacts ignored and out of the submitted tree. Directory-profile validation does not run the portal's safety scan or policy review. Check the new commit's report in the developer portal after pushing; a local pass does not guarantee publication or clear a human-review hold.
 
+See [Credential review](CREDENTIAL_REVIEW.md) for the reviewed authentication flow, file-by-file evidence, and a response for the directory reviewer.
+
 ### OpenAI ChatGPT and Codex
 
 The [OpenAI marketplace catalog](.agents/plugins/marketplace.json) points to the shared [Agent Plugins package](iblueprint/plugin.json).
