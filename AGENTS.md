@@ -11,4 +11,6 @@ Preserve repository-specific documentation, update guidance, ignore rules, and m
 
 Reuse `iblueprint/skills/` across hosts instead of duplicating workflow instructions. Keep all MCP configurations pointed at the same remote endpoint, use each host's supported transport format, and preserve browser-based OAuth and tool-call confirmations. Do not copy credentials, local environment files, dependency directories, OS metadata, or generated evaluation results.
 
-After updates, run `node --test iblueprint/tests/package.test.mjs`. When the Claude CLI is available, also run `claude plugin validate --strict .` and `claude plugin validate --strict iblueprint` from this repository's root.
+The Claude directory scans every committed file in `iblueprint/` and holds a version when a script there could reach an image. Keep package tests in this repository's root `tests/` folder: when the upstream package has its own `tests/`, merge those changes into `tests/package.test.mjs` instead of copying the folder into `iblueprint/`, and keep its plugin-root paths pointed at `iblueprint/`. Do not add scripts, binaries, or a `bin/` folder to `iblueprint/`.
+
+After updates, run `node --test tests/`. When the Claude CLI is available, also run `claude plugin validate --strict .` and `claude plugin validate --strict iblueprint` from this repository's root.

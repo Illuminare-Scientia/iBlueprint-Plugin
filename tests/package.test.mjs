@@ -5,8 +5,9 @@ import { describe, it } from 'node:test';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const pluginRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const repositoryRoot = resolve(pluginRoot, '..');
+// Kept outside iblueprint/ so the Claude directory, which scans every file in the plugin folder, never sees it.
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const pluginRoot = resolve(repositoryRoot, 'iblueprint');
 
 async function readJson(relativePath) {
   return JSON.parse(await readFile(resolve(pluginRoot, relativePath), 'utf8'));
@@ -16,6 +17,11 @@ async function readRepositoryJson(relativePath) {
   return JSON.parse(await readFile(resolve(repositoryRoot, relativePath), 'utf8'));
 }
 
+function trackedPluginFiles() {
+  return execFileSync('git', ['ls-files', '-z'], { cwd: pluginRoot, encoding: 'utf8' })
+    .split('\0').filter(Boolean);
+}
+
 describe('iBlueprint Claude directory file limits', () => {
   // The directory reads the plugin folder from GitHub and holds any version that exceeds these limits.
   const maxFiles = 512;
@@ -23,8 +29,7 @@ describe('iBlueprint Claude directory file limits', () => {
   const imageAndFontExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.ttf', '.otf', '.woff', '.woff2']);
 
   it('keeps tracked plugin files within the count and per-file size limits', async () => {
-    const files = execFileSync('git', ['ls-files', '-z'], { cwd: pluginRoot, encoding: 'utf8' })
-      .split('\0').filter(Boolean);
+    const files = trackedPluginFiles();
 
     assert.ok(files.includes('evals/mocks/iblueprint/_tools.json'));
     assert.ok(files.length <= maxFiles, `${files.length} files exceed ${maxFiles}`);
@@ -37,6 +42,19 @@ describe('iBlueprint Claude directory file limits', () => {
       if (imageAndFontExtensions.has(extname(file).toLowerCase())) continue;
       const { size } = await stat(resolve(pluginRoot, file));
       assert.ok(size < maxTextFileBytes, `${file} is ${size} bytes; keep it under ${maxTextFileBytes}`);
+    }
+  });
+
+  it('ships no scripts, binaries, or test folders that could run or read the icon', () => {
+    // The directory flags any script that could reach an image (UNREAD_ASSET_REFERENCED). The plugin is
+    // remote MCP plus skills, so its folder holds no code; package tests live in the repository-root tests/.
+    for (const file of trackedPluginFiles()) {
+      assert.doesNotMatch(file, /(^|\/)(bin|tests?|scripts)\//, `${file} must live outside the plugin folder`);
+      assert.doesNotMatch(
+        file,
+        /\.(m?js|cjs|ts|mts|cts|sh|bash|zsh|ps1|bat|cmd|py|rb|exe|dll|so|dylib|wasm)$/i,
+        `${file} is executable code; the plugin folder must not ship any`,
+      );
     }
   });
 });
@@ -174,10 +192,13 @@ describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
 
   it('includes square PNG listing and composer icons within submission size limits', async () => {
     const manifest = await readJson('plugin.json');
+    const claude = await readJson('.claude-plugin/plugin.json');
     const interfaceMetadata = manifest.extensions['com.openai'].interface;
 
+    // Every manifest reference points at the one bundled icon, which the directory reviews by eye.
+    assert.equal(claude.icon, './assets/icon.png');
     for (const field of ['logo', 'composerIcon']) {
-      assert.equal(interfaceMetadata[field], './assets/icon.png');
+      assert.equal(interfaceMetadata[field], claude.icon);
       const icon = await readFile(resolve(pluginRoot, interfaceMetadata[field]));
       assert.deepEqual(icon.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
       assert.equal(icon.toString('ascii', 12, 16), 'IHDR');
@@ -186,6 +207,16 @@ describe('iBlueprint portable OpenAI and Copilot plugin package', () => {
       assert.equal(width, height);
       assert.ok(width >= 48 && width <= 4096);
       assert.ok(icon.length <= 5 * 1024 * 1024);
+
+      // Walk the chunks: the file must end exactly at IEND, with nothing appended after the image.
+      let offset = 8;
+      let lastChunk;
+      while (offset + 12 <= icon.length && lastChunk !== 'IEND') {
+        lastChunk = icon.toString('ascii', offset + 4, offset + 8);
+        offset += 12 + icon.readUInt32BE(offset);
+      }
+      assert.equal(lastChunk, 'IEND');
+      assert.equal(offset, icon.length, `${icon.length - offset} bytes follow IEND`);
     }
   });
 

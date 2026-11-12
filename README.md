@@ -32,7 +32,7 @@ Anthropic directory listing metadata lives in [the Claude plugin manifest](iblue
 
 #### Claude directory submission
 
-The [Claude developer portal](https://claude.ai/directory/manage) reads the `iblueprint/` folder from this repository's `main` branch and scans each pushed commit; there is no ZIP upload. Every file in that folder counts, including `evals/` and `tests/`.
+The [Claude developer portal](https://claude.ai/directory/manage) reads the `iblueprint/` folder from this repository's `main` branch and scans each pushed commit; there is no ZIP upload. Every committed file in that folder counts, including `evals/`. The package tests live in the repository-root `tests/` folder, outside the scanned plugin folder.
 
 The directory holds a version for human review when any non-image, non-font file is 256 KiB or larger, or when the plugin has more than 512 files. The package test enforces both limits. The largest file is the eval tool snapshot, `evals/mocks/iblueprint/_tools.json`, so it is stored as compact JSON without indentation. Regenerate it the same way.
 
@@ -112,7 +112,7 @@ Compare the upstream `plugins/iblueprint/` package and `plugins/.claude-plugin/m
 From this repository's root, run:
 
 ```bash
-node --test iblueprint/tests/package.test.mjs
+node --test tests/
 ```
 
 When the Claude CLI is installed, also validate the marketplace and plugin:

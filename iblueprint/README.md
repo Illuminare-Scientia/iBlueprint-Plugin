@@ -56,11 +56,11 @@ In Claude Code 2.1.275 or later, install directly from this repository's marketp
 | `../.claude-plugin/marketplace.json` | Claude/Copilot marketplace catalog |
 | `../gemini-extension.json`, `../GEMINI.md` | Gemini CLI extension and shared context imports |
 | `evals/` | `claude plugin eval`; not loaded at run time |
-| `tests/` | `node --test`, checks the portable package |
+| `../tests/` | `node --test`, checks the package; kept outside this folder so the directory does not scan it |
 
 The evals answer from mocked tools in `evals/mocks/`, so they need no iBlueprint account or network access. The validation, test, and eval commands are in the [repository README](../README.md#development-and-updates).
 
-The Claude directory scans every file in this folder, including `evals/` and `tests/`, and holds a version for review when a non-image file reaches 256 KiB. Keep `evals/mocks/iblueprint/_tools.json` as compact JSON; see [Claude directory submission](../README.md#claude-directory-submission).
+The Claude directory scans every file in this folder, including `evals/`, and holds a version for review when a non-image file reaches 256 KiB. Keep `evals/mocks/iblueprint/_tools.json` as compact JSON; see [Claude directory submission](../README.md#claude-directory-submission).
 
 ## License
 
